@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This stack deploys a Fargate cluster that is in a VPC with both
+             public and private subnets. Containers can be deployed into either
+             the public subnets or the private subnets, and there are a load
+             balancer inside the public subnet, which can be used to
+             send traffic to the containers in the private subnet.
+
+
+Resources:
+
+  # ECS Resources
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+
+
+  # This is an IAM role which authorizes ECS to manage resources on your
+  # account on your behalf, such as updating your load balancer with the
+  # details of where your containers are, so that traffic can reach your
+  # containers.
+  ECSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+              # Rules which allow ECS to attach network interfaces to instances
+              # on your behalf in order for awsvpc networking mode to work right
+              - 'ec2:AttachNetworkInterface'
+              - 'ec2:CreateNetworkInterface'
+              - 'ec2:CreateNetworkInterfacePermission'
+              - 'ec2:DeleteNetworkInterface'
+              - 'ec2:DeleteNetworkInterfacePermission'
+              - 'ec2:Describe*'
+              - 'ec2:DetachNetworkInterface'
+
+              # Rules which allow ECS to update load balancers on your behalf
+              # with the information sabout how to send traffic to your containers
+              - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+              - 'elasticloadbalancing:DeregisterTargets'
+              - 'elasticloadbalancing:Describe*'
+              - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+              - 'elasticloadbalancing:RegisterTargets'
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+            Resource: '*'
+
+  # This is a role which is used by the ECS tasks themselves.
+  ECSTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+        - PolicyName: AmazonECSTaskExecutionRolePolicy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                # Allow the ECS Tasks to download images from ECR
+                - 'ecr:GetAuthorizationToken'
+                - 'ecr:BatchCheckLayerAvailability'
+                - 'ecr:GetDownloadUrlForLayer'
+                - 'ecr:BatchGetImage'
+                # Allow the ECS tasks to upload logs to CloudWatch
+                - 'logs:CreateLogGroup'
+                - 'logs:CreateLogStream'
+                - 'logs:PutLogEvents'
+              Resource: '*'
+
+  #-----------------------------------------------------------------------------#
+  # Parameter Store
+  # /env/resource
+  #-----------------------------------------------------------------------------#
+  SSMClusterName:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/ClusterName"
+      Type: "String"
+      Value: !Ref ECSCluster
+      Description: The name of the ECS cluster
+
+  SSMECSRole:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/ECSRole"
+      Type: "String"
+      Value: !Ref ECSRole
+      Description: The ARN of the ECS role
+
+  SSMECSTaskExecutionRole:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/ECSTaskExecutionRole"
+      Type: "String"
+      Value: !Ref ECSTaskExecutionRole
+      Description: The ARN of the ECS Task Execution role

@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - ls -lhas
+      - pwd
+      - echo "---------- TEST ----------"
+  post_build:
+    commands:
+      - echo "Python Build finished!"

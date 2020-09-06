@@ -1,0 +1,81 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Launcher - KMS"
+
+Resources:
+
+  KMS:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Id: !Ref AWS::StackName
+        Statement:
+          -
+            Sid: Allows admin of the key
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+            Action:
+              - kms:*
+            Resource: "*"
+
+  KMSAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: "alias/kmsalias-key"
+      TargetKeyId: !Ref KMS
+
+
+  S3Bucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: !Sub ${AWS::AccountId}-launcher
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              KMSMasterKeyID: !Ref KMSAlias
+              SSEAlgorithm: 'aws:kms'
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Bucket
+      PolicyDocument:
+        Statement:
+          -
+            Action:
+              - s3:PutObject
+              - s3:GetBucketPolicy
+              - s3:GetObject
+              - s3:ListBucket
+            Effect: Allow
+            Resource:
+              - !Sub arn:aws:s3:::${S3Bucket}
+              - !Sub arn:aws:s3:::${S3Bucket}/*
+            Principal:
+              AWS:
+                - !Sub arn:aws:iam::${AWS::AccountId}:root
+
+  pS3Bucket:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/s3_bucket"
+      Type: "String"
+      Value: !Ref S3Bucket
+
+  pKMS:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/kms_arn"
+      Type: "String"
+      Value: !GetAtt KMS.Arn
+
+  pKMSAlias:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: "/DevTools/kms_alias"
+      Type: "String"
+      Value: !Ref KMSAlias
+      Description: "KMSAlias"

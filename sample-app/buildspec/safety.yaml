@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - pip install safety
+  build:
+    commands:
+      - AccountID=$(aws sts get-caller-identity --query Account --output text)
+      - CommitID="$(echo $GitCommitID | head -c 8)"
+      - safety check > $CommitID-safety
+      - aws s3 cp report.html s3://$AccountID-launcher/$ServiceName-$BranchName/reports/$CommitID-safety.html
