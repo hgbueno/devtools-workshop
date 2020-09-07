@@ -77,6 +77,7 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 > * **1. Netwoking:** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
 > * **2. Common:** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
 > * **3. Fargate:** Cluster Fargate.
+
 > [Melhores práticas do AWS CloudFormation](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html)
 
 ### 2.1 Networking
