@@ -86,8 +86,8 @@ git clone https://github.com/hgbueno/devtools-workshop.git
     --stack-name networking \
     --template-file templates/networking.yaml \
     --capabilities CAPABILITY_IAM \
-    --region ***<region>*** \
-    --profile ***<profile>***
+    --region <region> \
+    --profile <profile>
 ```
 
 ### 2.2 Commons
