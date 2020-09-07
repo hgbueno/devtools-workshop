@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - pip install coverage
+  build:
+    commands:
+      - AccountID=$(aws sts get-caller-identity --query Account --output text)
+      - CommitID="$(echo $GitCommitID | head -c 8)"
+      - cd app
+      - echo "Running Unit Tests..."
+      - python -m unittest *.py
+      - echo "Running Test Coverage Analisys..."
+      - coverage report -m --fail-under 70 *.py > $CommitID.txt
+      - aws s3 cp $CommitID.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/unit-test-$CommitID.txt

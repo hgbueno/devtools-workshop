@@ -16,9 +16,8 @@ phases:
       - echo "RUN ./microscanner $Token --html --continue-on-failure " >> Dockerfile
       - cat Dockerfile
       - docker build --no-cache . >> results.html
-      - sed -n '/<html/,/<\/html/p' results.html >> $CommitID-microscanner.html
-      - cat $CommitID-microscanner.html
-      - aws s3 cp $CommitID-microscanner.html s3://$AccountID-launcher/$ServiceName-$BranchName/reports/$CommitID-microscanner.html
+      - sed -n '/<html/,/<\/html/p' results.html >> $CommitID.html
+      - aws s3 cp $CommitID.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/container-security-$CommitID.html
       - status=$(grep -wc "continue-on-failure" $CommitID-microscanner.html); if [ $status -eq 0 ]; then exit 0; else exit 1; fi
   post_build:
     commands:

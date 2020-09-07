@@ -8,5 +8,5 @@ phases:
     commands:
       - AccountID=$(aws sts get-caller-identity --query Account --output text)
       - CommitID="$(echo $GitCommitID | head -c 8)"
-      - dependency-check --disableAssembly -s . -o report.html
-      - aws s3 cp report.html s3://$AccountID-launcher/$ServiceName-$BranchName/reports/$CommitID-dependency-check.html
+      - dependency-check --disableAssembly -s . -o $CommitID.html
+      - aws s3 cp $CommitID.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/dependency-check-$CommitID.html
