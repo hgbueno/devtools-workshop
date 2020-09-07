@@ -1,10 +1,8 @@
-# Workshop AWS DevTools
-## AWS BlackBelt | DevOps
+# AWS BlackBelt | DevOps
+***Workshop AWS DevTools***
 
 
-----
-
-### 1. Preparação
+## 1. Preparação
 
 **1. Valide o acesso à sua conta no EventEngine através da console.**<br />
 *informações enviadas por e-mail* <br />
@@ -41,9 +39,8 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 
 > [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
 
-----
 
-### 2. Criação das stacks de fundação
+## 2. Criação das stacks de fundação
 > Seguindo a boa prática de segmentar stacks em camadas, criaremos 3 stacks:
 > * ***1. Netwoking:*** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
 > * ***2. Common:*** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
@@ -80,4 +77,5 @@ aws cloudformation deploy \
     --profile <profile>
 ```
 
-----
+## 3. Criando o primeiro micro-serviço
+
