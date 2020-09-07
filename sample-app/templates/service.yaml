@@ -1,41 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Deploy a service on AWS Fargate, hosted in a private subnet,
-              but accessible via a public load balancer.
-
+Description: "Launcher - Service"
 
 Parameters:
 
   ServiceName:
     Type: String
-    Description: A name for the service
+    Default: myapp2
+    Description: Service Name
+  ServicePath:
+    Type: String
+    Default: /myapp2
+    Description: Service Name
+  BranchName:
+    Type: String
+    Default: master
+    Description: Branch Name
   ContainerPort:
     Type: Number
     Default: 5000
     Description: What port number the application inside the docker container is binding to
-  Path:
-    Type: String
-    Default: "/example"
-    Description: A path on the public load balancer that this service
-                 should be connected to. Use * to send all load balancer
-                 traffic to this service.
-  Priority:
+  AlbRulePriority:
     Type: Number
     Default: 2
     Description: The priority for the routing rule added to the load balancer.
                  This only applies if your have multiple services which have been
                  assigned to different paths on the load balancer.
-  MinContainers:
+  AsContainersMin:
     Type: Number
     Default: 2
-  # for autoscaling
-  MaxContainers:
+    Description: Min mumber of tasks
+  AsContainersMax:
     Type: Number
     Default: 10
-  # target CPU utilization (%)
-  AutoScalingTargetValue:
+    Description: Max mumber of tasks
+  AsContainersDesired:
+    Type: Number
+    Default: 3
+    Description: Desired number of tasks
+  AsTargetCpuUtilization:
     Type: Number
     Default: 50
-    Description: arget CPU utilization (%)
+    Description: Target CPU utilization (%)
   ContainerCpu:
     Type: Number
     Default: 256
@@ -44,102 +49,30 @@ Parameters:
     Type: Number
     Default: 512
     Description: How much memory in megabytes to give the container
-  DesiredCount:
-    Type: Number
-    Default: 2
-    Description: How many copies of the service task to run
-  ImageUrl:
-    Type: String
-    Default: nginx
-    Description: The url of a docker image that contains the application process that
-                 will handle the traffic for this service
-
   ClusterName:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/ClusterName'
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/ClusterName"
   FargateContainerSecurityGroup:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/FargateContainerSecurityGroup'
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/FargateContainerSecurityGroup"
   ECSTaskExecutionRole:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/ECSTaskExecutionRole'
-  PrivateSubnetOne:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/PrivateSubnetOne'
-  PrivateSubnetTwo:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/PrivateSubnetTwo'
-  VPCId:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/VPCId'
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/ECSTaskExecutionRole"
+  PrivateSubnet1:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/PrivateSubnetOne"
+  PrivateSubnet2:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/PrivateSubnetTwo"
+  VpcId:
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/VPCId"
   PublicListener:
-    Type:  'AWS::SSM::Parameter::Value<String>'
-    Default: '/DevTools/PublicListener'
-
-
-
-Metadata:
-  AWS::CloudFormation::Interface:
-    ParameterGroups:
-      -
-        Label:
-          default: "SERVICE CONFIGURATION"
-        Parameters:
-          - ServiceName
-          - ContainerPort
-          - DesiredCount
-      -
-        Label:
-          default: "CONTAINER CONFIGURATION"
-        Parameters:
-          - ContainerCpu
-          - ContainerMemory
-      -
-        Label:
-          default: "LOAD BALANCER CONFIGURATION"
-        Parameters:
-          - Path
-          - Priority
-      -
-        Label:
-          default: "AUTO SCALING CONFIGURATION"
-        Parameters:
-          - MinContainers
-          - MaxContainers
-          - AutoScalingTargetValue
+    Type: "AWS::SSM::Parameter::Value<String>"
+    Default: "/DevTools/PublicListener"
 
 
 Resources:
-
-  #-----------------------------------------------------------------------------#
-  # CodeCommit
-  #-----------------------------------------------------------------------------#
-  Repository:
-    Type: AWS::CodeCommit::Repository
-    Properties:
-      RepositoryName: !Ref ServiceName
-      RepositoryDescription: !Ref ServiceName
-
-  #-----------------------------------------------------------------------------#
-  # ECR
-  #-----------------------------------------------------------------------------#
-  ECR:
-    Type: AWS::ECR::Repository
-    Properties:
-      RepositoryName: !Ref ServiceName
-      RepositoryPolicyText:
-        Version: "2012-10-17"
-        Statement:
-          -
-            Sid: AllowPushPull
-            Effect: Allow
-            Principal:
-              AWS:
-                - !Sub arn:aws:iam::${AWS::AccountId}:root
-              Service:
-                - "codebuild.amazonaws.com"
-            Action:
-              - ecr:*
 
 
   # The task definition. This is a simple metadata description of what
@@ -147,18 +80,18 @@ Resources:
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: !Ref 'ServiceName'
-      Cpu: !Ref 'ContainerCpu'
-      Memory: !Ref 'ContainerMemory'
+      Family: !Sub "${ServiceName}-${BranchName}"
+      Cpu: !Ref ContainerCpu
+      Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       ExecutionRoleArn: !Ref ECSTaskExecutionRole
       ContainerDefinitions:
-        - Name: !Sub task-${ServiceName}
+        - Name: !Sub "task-${ServiceName}-${BranchName}"
           Cpu: !Ref 'ContainerCpu'
-          Memory: !Ref 'ContainerMemory'
-          Image: !Ref ImageUrl
+          Memory: !Ref ContainerMemory
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ServiceName}"
           PortMappings:
             - ContainerPort: !Ref 'ContainerPort'
           LogConfiguration:
@@ -166,8 +99,8 @@ Resources:
             Options:
               awslogs-create-group: "true"
               awslogs-region: !Sub "${AWS::Region}"
-              awslogs-group: !Sub "${ServiceName}"
-              awslogs-stream-prefix: !Sub "${ServiceName}"
+              awslogs-group: !Sub "${ServiceName}-${BranchName}"
+              awslogs-stream-prefix: !Sub "${ServiceName}-${BranchName}"
 
   # The service. The service is a resource which allows you to run multiple
   # copies of a type of task, and gather up their logs and metrics, as well
@@ -176,27 +109,27 @@ Resources:
     Type: AWS::ECS::Service
     DependsOn: LoadBalancerRule
     Properties:
-      ServiceName: !Ref 'ServiceName'
+      ServiceName: !Sub "${ServiceName}-${BranchName}"
       Cluster: !Ref ClusterName
-      EnableECSManagedTags: true
-      PropagateTags: SERVICE
+      #EnableECSManagedTags: true
+      #PropagateTags: SERVICE
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 75
-      DesiredCount: !Ref 'DesiredCount'
+      DesiredCount: !Ref AsContainersDesired
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           SecurityGroups:
             - !Ref FargateContainerSecurityGroup
           Subnets:
-            - !Ref PrivateSubnetOne
-            - !Ref PrivateSubnetTwo
+            - !Ref PrivateSubnet1
+            - !Ref PrivateSubnet2
       TaskDefinition: !Ref 'TaskDefinition'
       LoadBalancers:
-        - ContainerName: !Sub task-${ServiceName}
-          ContainerPort: !Ref 'ContainerPort'
+        - ContainerName: !Sub "task-${ServiceName}-${BranchName}"
+          ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref 'TargetGroup'
 
   # A target group. This is used for keeping track of all the tasks, and
@@ -208,16 +141,16 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       HealthCheckIntervalSeconds: 6
-      HealthCheckPath: !Ref 'Path'
+      HealthCheckPath: !Ref ServicePath
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       TargetType: ip
-      Name: !Ref 'ServiceName'
+      Name: !Sub "${ServiceName}-${BranchName}"
       Port: !Ref 'ContainerPort'
       Protocol: HTTP
       UnhealthyThresholdCount: 2
-      VpcId: !Ref VPCId
+      VpcId: !Ref VpcId
 
   # Create a rule on the load balancer for routing traffic to the target group
   LoadBalancerRule:
@@ -228,21 +161,21 @@ Resources:
           Type: 'forward'
       Conditions:
         - Field: path-pattern
-          Values: [!Ref 'Path']
+          Values: [!Ref ServicePath]
       ListenerArn: !Ref PublicListener
-      Priority: !Ref 'Priority'
+      Priority: !Ref AlbRulePriority
 
   LogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Join ['', [/ecs/, !Ref ServiceName, TaskDefinition]]
+      LogGroupName: !Sub "${ServiceName}-${BranchName}"
 
   AutoScalingTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
-      MinCapacity: !Ref MinContainers
-      MaxCapacity: !Ref MaxContainers
-      ResourceId: !Join ['/', [service, !Ref ClusterName, !Ref ServiceName]]
+      MinCapacity: !Ref AsContainersMin
+      MaxCapacity: !Ref AsContainersMax
+      ResourceId: !Sub "service/${ClusterName}/${ServiceName}-${BranchName}"
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
       # "The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that allows Application Auto Scaling to modify your scalable target."
@@ -251,7 +184,7 @@ Resources:
   AutoScalingPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Join ['', [!Ref ServiceName, AutoScalingPolicy]]
+      PolicyName: !Sub "${ServiceName}-${BranchName}-AutoScalingPolicy"
       PolicyType: TargetTrackingScaling
       ScalingTargetId: !Ref AutoScalingTarget
       TargetTrackingScalingPolicyConfiguration:
@@ -260,12 +193,11 @@ Resources:
         ScaleInCooldown: 10
         ScaleOutCooldown: 10
         # Keep things at or lower than 50% CPU utilization, for example
-        TargetValue: !Ref AutoScalingTargetValue
+        TargetValue: !Ref AsTargetCpuUtilization
 
   AutoScalingRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Join ['', [!Ref ServiceName, AutoScalingRole]]
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow

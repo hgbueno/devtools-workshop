@@ -408,7 +408,7 @@ Resources:
               Configuration:
                 RoleArn: !GetAtt CodeDeployRole.Arn
                 ActionMode: CREATE_UPDATE
-                Capabilities: CAPABILITY_IAM
+                Capabilities: CAPABILITY_NAMED_IAM
                 StackName: !Sub "${ServiceName}-${BranchName}"
                 ChangeSetName: !Sub "${ServiceName}-${BranchName}"
                 TemplatePath: "Source::templates/service.yaml"
