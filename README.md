@@ -19,9 +19,9 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 * ***Unit Test & Test Coverage***
     * [Unit testing framework](https://docs.python.org/3/library/unittest.html)
     * [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.2.1/)
-* ***CFN_Nag***
+* ***Lint para Cloudformation***
     * [GFN_Nag](https://github.com/stelligent/cfn_nag)
-* ***DockerFile Lint***
+* ***Lint para Dockerfile***
     * [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * ***SAST***
     * [OWASP Dependency Check](https://pypi.org/project/dependency-check/)
