@@ -12,9 +12,9 @@
 <br />
 
 2. Instale a ***aws cli*** e crie um novo profile para a sua conta.<br />
-[Como instalar] (https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
+[Como instalar](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 <br />
-[Como configurar] (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+[Como configurar](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 <br />
 
 3. Valide a configuração do seu profile.
