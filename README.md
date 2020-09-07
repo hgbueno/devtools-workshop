@@ -35,7 +35,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 > [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
 
 
-### 6. Clone este repositório.
+### 1.6 Clone este repositório.
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
@@ -81,41 +81,45 @@ aws cloudformation deploy \
 
 
 ### 3.1 Crie a stack para o micro-serviço
-* Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
-    * Stack name: myapp
-    * ServiceName: myapp
-    <br />
-    *Não é necessário alterar os valores dos demais parâmetros.*
+
+#### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+* Stack name: myapp
+* ServiceName: myapp
+> *Não é necessário alterar os valores dos demais parâmetros.*
 
 * Verifique se a pipeline foi criada no CodePipeline.
 * Verifique se o repositório foi criado no CodeCommit.
 
+
 ### 3.2 Clone o novo repositório e copie os arquivos da aplicação.
-* Clone o repositório
-<br />
-Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
-Na sua máquina, execute:
+
+#### Clone o repositório
+
+* Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
+* Na sua máquina, execute:
 ```
 git clone <RepoURL>
 ```
+
 * Copie o conteúdo do diretório sample-app do repositório do workshop para o novo repositório do CodeCommit.
-Exemplo:
+    * Exemplo:
 
 ```
 cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 ```
-* Edite os seguintes arquivos para o novo micro-serviço:
-    * templates/service.yaml
-        * ServiceName: myapp
-        * ServicePath: myapp/
-        * BranchName: myapp
-        * ContainerPort: 5000
-        * AlbRulePriority: 2
 
-    * app/main.py
-        *  **@app.route("/myapp")**
+#### Edite os seguintes arquivos para o novo micro-serviço:
+* templates/service.yaml
+    * ServiceName: myapp
+    * ServicePath: myapp/
+    * BranchName: myapp
+    * ContainerPort: 5000
+    * AlbRulePriority: 2
 
-* Envie as mudanças para repositório
+* app/main.py
+    *  **@app.route("/myapp")**
+
+#### Envie as mudanças para repositório
 ```
 git add .
 git commit -m "first commit"
