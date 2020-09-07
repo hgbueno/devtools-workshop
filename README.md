@@ -7,31 +7,23 @@
 ### **Preparação**
 
 1. Valide o acesso à sua conta no EventEngine através da console. <br />
-*informações enviadas por e-mail* <br />
+*informações enviadas por e-mail* <br /> <br />
 [Event Engine](https://dashboard.eventengine.run/login)
-<br />
 
 2. Instale a ***aws cli*** e crie um novo profile para a sua conta.
-<br />
-
 * [Como instalar](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 * [Como configurar](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 3. Valide a configuração do seu profile.
-<br />
 O comando abaixo deverá retornar seu AccountId:
-
 ```
 aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
-<br />
-
 
 4. Clone este repositório.
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
-<br />
 
 ----
 
