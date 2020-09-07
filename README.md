@@ -19,12 +19,12 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 * ***Unit Test & Test Coverage***
     * [Unit testing framework](https://docs.python.org/3/library/unittest.html)
     * [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.2.1/)
+* ***DockerFile Lint***
+    * [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * ***SAST***
     * [OWASP Dependency Check](https://pypi.org/project/dependency-check/)
     * [Safety](https://github.com/pyupio/safety)
     * [Bandit](https://github.com/PyCQA/bandit)
-* ***DockerFile Lint***
-    * [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * ***Container Security***
     * [Trivy](https://github.com/aquasecurity/trivy)
 
@@ -36,7 +36,6 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 3. Criação do primeiro micro-serviço
 4. Criação de pipelines para novas branches
 5. Adicionando testes na pipeline
-6. Disponibilizando o template pelo Service Catalog
 
 <br />
 <br />
@@ -201,7 +200,10 @@ git push origin develop
 * **BranchName:** develop
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
+* Verifique que a pipeline foi criada no CodePipeline.
+> Não será criado um novo repositório como da primeira vez porque existe uma ***condition*** no Cloudformation para apenas criar o repositório quando a branch informada for a ***master***.
 
+#### Valide a execução da pipeline
 
 <br />
 <br />
@@ -210,8 +212,19 @@ git push origin develop
 
 ## 5. Adicionando estágios de testes na pipeline
 
-### 5.1 Abra os arquivos buildspec
-* buildspec/git-secrets.yaml
-* buildspec/container-security.yaml
-* buildspec/dependency-check.yaml
-* buildspec/dockerfile-lint.yaml
+### 5.1 Edite a pipeline master
+* Através da console do Cloudformation, edite a stack da pipeline master, selecionando a opção ***Use current template***.
+* Habilite os demais testes que estavam desabilitados.
+* Após concluir a atualização, vá até a pipeline no console do CodePipeline e clique em ***Release Changes***.
+
+
+### 5.2 Abra os arquivos buildspec
+* Enquanto a pipeline está rodando, aproveite para dar uma olhada nos arquivos buildspec de cada projeto do CodeBuild:
+    * buildspec/git-secrets.yaml
+    * buildspec/unit-test.yaml
+    * buildspec/sast.yaml
+    * buildspec/hadolint.yaml
+    * buildspec/trivy.yaml
+
+<br />
+<br />
