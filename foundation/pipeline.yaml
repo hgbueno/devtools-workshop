@@ -77,6 +77,8 @@ Resources:
     Condition: MasterBranch
     Properties:
       RepositoryName: !Ref ServiceName
+      RepositoryDescription: !Sub "Microservice ${ServiceName}"
+
 
 
   #-----------------------------------------------------------------------------#
@@ -369,7 +371,6 @@ Resources:
       TimeoutInMinutes: 10
 
   cbUnitTest:
-    Condition: TestSastSecurity
     Type: AWS::CodeBuild::Project
     Properties:
       EncryptionKey: !Ref KmsArn

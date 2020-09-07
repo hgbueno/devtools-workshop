@@ -22,4 +22,5 @@ class TestGetPath(unittest.TestCase):
                 self.assertEqual("/test", get_path("test"), "Teste Unitário falhou")
 
 if __name__ == "__main__":
+    unittest.main()
     app.run(host='0.0.0.0')

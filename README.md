@@ -85,7 +85,7 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 ```
  aws cloudformation deploy \
     --stack-name networking \
-    --template-file templates/networking.yaml \
+    --template-file foundation/networking.yaml \
     --capabilities CAPABILITY_IAM \
     --region <region> \
     --profile <profile>
@@ -95,7 +95,7 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 ```
 aws cloudformation deploy \
     --stack-name commons \
-    --template-file templates/commons.yaml \
+    --template-file foundation/commons.yaml \
     --capabilities CAPABILITY_IAM \
     --region <region> \
     --profile <profile>
@@ -105,7 +105,7 @@ aws cloudformation deploy \
 ```
 aws cloudformation deploy \
     --stack-name fargate \
-    --template-file templates/fargate.yaml \
+    --template-file foundation/fargate.yaml \
     --capabilities CAPABILITY_IAM \
     --region <region> \
     --profile <profile>
@@ -147,12 +147,9 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 * templates/service.yaml
     * **ServiceName:** myapp
     * **ServicePath:** myapp/
-    * **BranchName:** master
-    * **ContainerPort:** 5000
-    * **AlbRulePriority:** 2
 
 * app/main.py
-    *  **@app.route("/myapp")**
+    *  **mypath="myapp"**
 
 #### Envie as mudanças para repositório
 ```
@@ -175,14 +172,12 @@ git checkout -b develop
 ### 4.2 Edite os seguintes arquivos para o novo micro-serviço:
 
 * templates/service.yaml
-    * **ServiceName:** myapp
     * **ServicePath:** /myapp-develop
     * **BranchName:** develop
-    * **ContainerPort:** 5000
     * **AlbRulePriority:** 3 (AlbRulePriority + 1)
 
 * app/main.py
-    *  **@app.route("/myapp-develop")**
+    *  **mypath="myapp-develop"**
 
 #### Envie as mudanças para repositório
 ```
@@ -190,6 +185,15 @@ git add .
 git commit -m "first commit"
 git push origin develop
 ```
+
+#### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+* **Stack name:** myapp-develop
+* **ServiceName:** myapp (mesmo nome do serviço criado anteriormente)
+* **BranchName:** develop
+> *Não é necessário alterar os valores dos demais parâmetros.*
+
+
+
 <br />
 <br />
 <br />

@@ -4,6 +4,7 @@ phases:
   install:
     commands:
       - pip install coverage
+      - pip3 install -r requirements.txt
   build:
     commands:
       - AccountID=$(aws sts get-caller-identity --query Account --output text)
@@ -12,5 +13,6 @@ phases:
       - echo "Running Unit Tests..."
       - python -m unittest *.py
       - echo "Running Test Coverage Analisys..."
-      - coverage report -m --fail-under 70 *.py > $CommitID.txt
+      - coverage run main.py
+      - coverage report -m --fail-under 70 > $CommitID.txt
       - aws s3 cp $CommitID.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/unit-test-$CommitID.txt
