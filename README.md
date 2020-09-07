@@ -4,21 +4,21 @@
 
 ## 1. Preparação
 
-**1. Valide o acesso à sua conta no EventEngine através da console.**<br />
+### 1.1 Valide o acesso à sua conta no EventEngine através da console.
 *informações enviadas por e-mail* <br />
 > * [Event Engine](https://dashboard.eventengine.run/login)
 
-**2. Caso ainda não tenha, instale a ***aws cli*** e crie um novo profile para a sua conta.**
+### 1.2 Caso ainda não tenha, instale a ***aws cli*** e crie um novo profile para a sua conta.
 > * [Como instalar](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 > * [Como configurar](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
-**3. Valide a configuração do seu profile.** <br />
+### 1.3 Valide a configuração do seu profile.
 O comando abaixo deverá retornar seu **AccountId**:
 ```
 aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
 
-**4. Crie seu usuário para o CodeCommit.**
+### 1.4 Crie seu usuário para o CodeCommit.
 * Crie um grupo chamado CodeCommitUsers e selecione a managed policy ***AWSCodeCommitPowerUser***.
 * Crie um novo usuário com acesso do tipo ***Programmatic access*** (sem acesso à console) e o adicione ao grupo criado anteriormente.
 * Crie uma nova credencial HTTPS para o CodeCommit para este novo usuário.
@@ -27,7 +27,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 > * [Configuração para usuários de HTTPS usando credenciais do Git](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/setting-up-gc.html)
 
 
-**5. Confirme se a nova credencial está funcionando.**
+### 1.5 Confirme se a nova credencial está funcionando.
 * Crie um repositório apenas para teste.
 * Clone o repositório em sua máquina utilizando a nova credencial.
 * Delete o repositório.
@@ -35,7 +35,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 > [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
 
 
-**6. Clone este repositório.**
+### 6. Clone este repositório.
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
@@ -47,7 +47,7 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 > * ***2. Common:*** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
 > * ***3. Fargate:*** Cluster Fargate.
 
-**1. Networking**
+### 2.1 Networking
 ```
  aws cloudformation deploy \
     --stack-name networking \
@@ -57,7 +57,7 @@ git clone https://github.com/hgbueno/devtools-workshop.git
     --profile <profile>
 ```
 
-**2. Commons**
+### 2.2 Commons
 ```
 aws cloudformation deploy \
     --stack-name commons \
@@ -66,7 +66,8 @@ aws cloudformation deploy \
     --region <region> \
     --profile <profile>
 ```
-**3. Fargate**
+
+### 2.3 Fargate
 ```
 aws cloudformation deploy \
     --stack-name fargate \
@@ -79,20 +80,19 @@ aws cloudformation deploy \
 ## 3. Criação o primeiro micro-serviço
 
 
-#### Crie a stack para o micro-serviço
+### 3.1 Crie a stack para o micro-serviço
 * Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
     * Stack name: myapp
     * ServiceName: myapp
-    <br \>
+    <br />
     *Não é necessário alterar os valores dos demais parâmetros.*
 
 * Verifique se a pipeline foi criada no CodePipeline.
 * Verifique se o repositório foi criado no CodeCommit.
 
-#### Clone o novo repositório e copie os arquivos da aplicação.
+### 3.2 Clone o novo repositório e copie os arquivos da aplicação.
 * Clone o repositório
-
-<br \>
+<br />
 Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
 Na sua máquina, execute:
 ```
