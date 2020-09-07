@@ -84,10 +84,13 @@ aws cloudformation deploy \
 * Verifique se a pipeline foi criada no CodePipeline.
 * Verifique se o repositório foi criado no CodeCommit.
 
-#### Clone o novo repositório e faça o primeiro commit.
+#### Clone o novo repositório e copie os arquivos da aplicação.
 * Clone o repositório
+<br \>
+Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
+Na sua máquina, execute:
 ```
-git clone <RepoURI>
+git clone <RepoURL>
 ```
 * Copie o conteúdo do diretório sample-app do repositório do workshop para o novo repositório do CodeCommit.
 Exemplo:
@@ -97,11 +100,18 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 ```
 * Edite os seguintes arquivos para o novo micro-serviço:
     * templates/service.yaml
-        * ServiceName
-        * ServicePath
-        * BranchName
-        * ContainerPort
-        * AlbRulePriority
+        * ServiceName: myapp
+        * ServicePath: myapp/
+        * BranchName: myapp
+        * ContainerPort: 5000
+        * AlbRulePriority: 2
 
     * app/main.py
-        * altere a linha **@app.route("/myapp")** para o path que você deseja. Obs: não pode repetir.
+        *  **@app.route("/myapp")**
+
+* Envie as mudanças para repositório
+```
+git add .
+git commit -m "first commit"
+git push origin master
+```
