@@ -2,8 +2,18 @@
 
 ![AWS BlackBelt ](img/bb_logo.png)
 
-## Workshop AWS DevTools*
-Tópicos:
+## Workshop AWS DevTools
+
+### Visão Geral
+Este workshop guiará você na criação de um ambiente para execução de um micro-serviço de exemplo rodando no AWS Fargate.
+
+#### Stack
+* **Linguagem:** Python
+* **Git:** CodeCommit
+* **Pipeline:** CodePipeline + CodeBuild + CodeDeploy
+* **Recurso computacional:** ECS Fargate
+
+### Tópicos:
 1. Preparação do ambiente
 2. Criação das stacks de fundação
 3. Criação do primeiro micro-serviço
