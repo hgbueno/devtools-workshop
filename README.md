@@ -6,8 +6,8 @@
 
 ### **Preparação**
 
-1. Valide o acesso à sua conta no EventEngine através da console. <br />
-*informações enviadas por e-mail* <br /> <br />
+1. Valide o acesso à sua conta no EventEngine através da console.<br />
+*informações enviadas por e-mail* <br />
 [Event Engine](https://dashboard.eventengine.run/login)
 
 2. Instale a ***aws cli*** e crie um novo profile para a sua conta.
@@ -28,13 +28,14 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 ----
 
 ### **Criação das Stacks de fundação**
-Seguindo a boa prática de segmentar stacks em camadas, criaremos 3 stacks:
-1. Netwoking: Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
+> Seguindo a boa prática de segmentar stacks em camadas, criaremos 3 stacks:
+> ***1. Netwoking:*** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
 
-2. Common: Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
+> ***2. Common:*** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
 
-3. Fargate: Cluster Fargate.
+> ***3. Fargate:*** Cluster Fargate.
 
+<br /> <br />
 
 **1. Networking**
 ```
