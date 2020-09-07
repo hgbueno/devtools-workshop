@@ -14,6 +14,7 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 * **Recurso computacional:** ECS Fargate
 
 ### Tópicos:
+
 1. Preparação do ambiente
 2. Criação das stacks de fundação
 3. Criação do primeiro micro-serviço
