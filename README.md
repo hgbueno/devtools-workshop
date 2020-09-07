@@ -13,9 +13,16 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 * **Pipeline:** CodePipeline + CodeBuild + CodeDeploy
 * **Recurso computacional:** ECS Fargate
 
+#### Testes aplicados na pipeline:
+* Git Secrets
+* SAST
+* DockerFile Lint (Hadolint)
+* Container Security
+
+
 ### Tópicos:
 
-1. Preparação do ambiente
+1. Preparação do ambiente para o workshop
 2. Criação das stacks de fundação
 3. Criação do primeiro micro-serviço
 4. Criação de pipelines para novas branches
@@ -24,10 +31,10 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 <br />
 <br />
 
-## 1. Preparação
+## 1. Preparação do ambiente para o workshop
 
 ### 1.1 Valide o acesso à sua conta no EventEngine através da console.
-> *informações enviadas por e-mail* <br />
+> *informações enviadas por e-mail*
 > * [Event Engine](https://dashboard.eventengine.run/login)
 
 ### 1.2 Caso ainda não tenha, instale a ***aws cli*** e crie um novo profile para a sua conta.
