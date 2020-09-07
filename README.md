@@ -1,16 +1,19 @@
 # AWS BlackBelt | DevOps
 ***Workshop AWS DevTools***
 
+<br />
+<br />
+<br />
 
 ## 1. Preparação
 
 ### 1.1 Valide o acesso à sua conta no EventEngine através da console.
-*informações enviadas por e-mail* <br />
+> *informações enviadas por e-mail* <br />
 > * [Event Engine](https://dashboard.eventengine.run/login)
 
 ### 1.2 Caso ainda não tenha, instale a ***aws cli*** e crie um novo profile para a sua conta.
-> * [Como instalar](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
-> * [Como configurar](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+> * [Como instalar a aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
+> * [Como configurar um novo profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 ### 1.3 Valide a configuração do seu profile.
 O comando abaixo deverá retornar seu **AccountId**:
@@ -27,7 +30,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 > * [Configuração para usuários de HTTPS usando credenciais do Git](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/setting-up-gc.html)
 
 
-### 1.5 Confirme se a nova credencial está funcionando.
+### 1.5 Confirme que a nova credencial está funcionando.
 * Crie um repositório apenas para teste.
 * Clone o repositório em sua máquina utilizando a nova credencial.
 * Delete o repositório.
@@ -39,13 +42,15 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
-
+<br />
+<br />
+<br />
 
 ## 2. Criação das stacks de fundação
-> Seguindo a boa prática de segmentar stacks em camadas, criaremos 3 stacks:
-> * ***1. Netwoking:*** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
-> * ***2. Common:*** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
-> * ***3. Fargate:*** Cluster Fargate.
+> Seguindo a boa prática para segmentar stacks em camadas, criaremos 3 stacks:
+> * **1. Netwoking:** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
+> * **2. Common:** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
+> * **3. Fargate:** Cluster Fargate.
 
 ### 2.1 Networking
 ```
@@ -53,8 +58,8 @@ git clone https://github.com/hgbueno/devtools-workshop.git
     --stack-name networking \
     --template-file templates/networking.yaml \
     --capabilities CAPABILITY_IAM \
-    --region <region> \
-    --profile <profile>
+    --region ***<region>*** \
+    --profile ***<profile>***
 ```
 
 ### 2.2 Commons
@@ -76,6 +81,9 @@ aws cloudformation deploy \
     --region <region> \
     --profile <profile>
 ```
+<br />
+<br />
+<br />
 
 ## 3. Criação o primeiro micro-serviço
 
@@ -83,12 +91,12 @@ aws cloudformation deploy \
 ### 3.1 Crie a stack para o micro-serviço
 
 #### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
-* Stack name: myapp
-* ServiceName: myapp
+* **Stack name:** myapp
+* **ServiceName:** myapp
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
-* Verifique se a pipeline foi criada no CodePipeline.
-* Verifique se o repositório foi criado no CodeCommit.
+* Verifique que a pipeline foi criada no CodePipeline.
+* Verifique que o repositório foi criado no CodeCommit.
 
 
 ### 3.2 Clone o novo repositório e copie os arquivos da aplicação.
@@ -101,20 +109,18 @@ aws cloudformation deploy \
 git clone <RepoURL>
 ```
 
-* Copie o conteúdo do diretório sample-app do repositório do workshop para o novo repositório do CodeCommit.
-    * Exemplo:
-
+* Copie o conteúdo do diretório sample-app do repositório do workshop para o novo repositório do CodeCommit. Exemplo:
 ```
 cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 ```
 
 #### Edite os seguintes arquivos para o novo micro-serviço:
 * templates/service.yaml
-    * ServiceName: myapp
-    * ServicePath: myapp/
-    * BranchName: myapp
-    * ContainerPort: 5000
-    * AlbRulePriority: 2
+    * **ServiceName:** myapp
+    * **ServicePath:** myapp/
+    * **BranchName:** myapp
+    * **ContainerPort:** 5000
+    * **AlbRulePriority:** 2
 
 * app/main.py
     *  **@app.route("/myapp")**
@@ -125,3 +131,6 @@ git add .
 git commit -m "first commit"
 git push origin master
 ```
+<br />
+<br />
+<br />
