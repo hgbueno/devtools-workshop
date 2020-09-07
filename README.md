@@ -6,17 +6,14 @@
 
 ### **Preparação**
 
-1. Valide o acesso à sua conta no EventEngine através da console.
-<p>
+1. Valide o acesso à sua conta no EventEngine através da console. <br />
 *informações enviadas por e-mail*
-<https://dashboard.eventengine.run/login>
-</p>
+https://dashboard.eventengine.run/login
 
-2. Instale a ***aws cli*** e crie um novo profile para a sua conta.
-<p> Como instalar: <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
+2. Instale a ***aws cli*** e crie um novo profile para a sua conta.<br />
+Como instalar: <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html>
 
 Como configurar: <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html>
-</p>
 
 3. Valide a configuração do seu profile.
 * O comando abaixo deverá retornar seu AccountId:
