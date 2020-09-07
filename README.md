@@ -1,4 +1,6 @@
-# AWS BlackBelt | DevOps
+# AWS BlackBelt | *Application Modernization*
+![AWS BlackBelt ](img/bb_logo.png)
+
 ***Workshop AWS DevTools***
 
 <br />
