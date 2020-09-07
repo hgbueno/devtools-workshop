@@ -35,7 +35,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 > [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
 
 
-**4. Clone este repositório.**
+**6. Clone este repositório.**
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
@@ -78,3 +78,30 @@ aws cloudformation deploy \
 
 ## 3. Criação o primeiro micro-serviço
 
+
+#### Crie a stack para o micro-serviço
+* Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml**
+* Verifique se a pipeline foi criada no CodePipeline.
+* Verifique se o repositório foi criado no CodeCommit.
+
+#### Clone o novo repositório e faça o primeiro commit.
+* Clone o repositório
+```
+git clone <RepoURI>
+```
+* Copie o conteúdo do diretório sample-app do repositório do workshop para o novo repositório do CodeCommit.
+Exemplo:
+
+```
+cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
+```
+* Edite os seguintes arquivos para o novo micro-serviço:
+    * templates/service.yaml
+        * ServiceName
+        * ServicePath
+        * BranchName
+        * ContainerPort
+        * AlbRulePriority
+
+    * app/main.py
+        * altere a linha **@app.route("/myapp")** para o path que você deseja. Obs: não pode repetir.

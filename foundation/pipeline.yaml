@@ -8,57 +8,24 @@ Parameters:
   BranchName:
     Type: String
     Default: master
-  Language:
-    Type: String
-    Default: python
-    AllowedValues:
-      - python
-  BuildCreateStage:
-    Type: String
-    Default: true
-    AllowedValues:
-      - true
-      - false
-  TestGitSecrets:
-    Type: String
-    Default: true
-    AllowedValues:
-      - true
-      - false
-  TestCfnLint:
-    Type: String
-    Default: true
-    AllowedValues:
-      - true
-      - false
   TestDockerFileLint:
     Type: String
-    Default: true
+    Default: false
     AllowedValues:
       - true
       - false
   TestSastSecurity:
     Type: String
-    Default: true
+    Default: false
     AllowedValues:
       - true
       - false
   TestContainerSecurity:
     Type: String
-    Default: true
+    Default: false
     AllowedValues:
       - true
       - false
-  PublishRegistry:
-    Type: String
-    Default: ecr
-  ContainerService:
-    Type: String
-    Default: fargate
-    AllowedValues:
-      - fargate
-      - ecs
-      - eks
   ClusterName:
     Type: 'AWS::SSM::Parameter::Value<String>'
     Default: '/DevTools/ClusterName'
@@ -69,7 +36,6 @@ Parameters:
     Type: 'AWS::SSM::Parameter::Value<String>'
     Default: '/DevTools/s3_bucket'
 
-
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -79,26 +45,16 @@ Metadata:
         Parameters:
           - ServiceName
           - BranchName
-          - Language
       -
         Label:
           default: "Pipeline - Tests"
         Parameters:
-          - BuildCreateStage
-          - TestGitSecrets
-          - TestCfnLint
           - TestDockerFileLint
           - TestSastSecurity
           - TestContainerSecurity
       -
         Label:
-          default: "Pipeline - Container Service"
-        Parameters:
-          - PublishRegistry
-          - ContainerService
-      -
-        Label:
-          default: "Foundation (do not change)"
+          default: "Commons (do not change)"
         Parameters:
           - ClusterName
           - S3Bucket
@@ -106,9 +62,6 @@ Metadata:
 
 Conditions:
   MasterBranch: !Equals [ !Ref BranchName, "master" ]
-  BuildCreateStage: !Equals [ !Ref BuildCreateStage, "true" ]
-  TestGitSecrets: !Not [ !Equals [ !Ref TestGitSecrets, "false" ] ]
-  TestCfnLint: !Not [ !Equals [ !Ref TestCfnLint, "false" ] ]
   TestDockerFileLint: !Not [ !Equals [ !Ref TestDockerFileLint, "false" ] ]
   TestSastSecurity: !Not [ !Equals [ !Ref TestSastSecurity, "false" ] ]
   TestContainerSecurity: !Not [ !Equals [ !Ref TestContainerSecurity, "false" ] ]
@@ -189,9 +142,6 @@ Resources:
         #-----------------------------------------------------------------------------#
         - Name: "Continuous_Integration"
           Actions:
-
-          - !If
-            - TestGitSecrets
             - Name: GitSecrets
               ActionTypeId:
                 Category: Build
@@ -205,151 +155,93 @@ Resources:
               Configuration:
                 ProjectName: !Ref cbGitSecrets
               RunOrder: 1
-            - !Ref AWS::NoValue
 
-          - !If
-            - TestCfnLint
-            - Name: CfnLint
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: "1"
-                Provider: CodeBuild
-              OutputArtifacts:
-                - Name: CfnLint
-              InputArtifacts:
-                - Name: Source
-              Configuration:
-                ProjectName: !Ref cbCfnLint
-              RunOrder: 1
-            - !Ref AWS::NoValue
+            - !If
+              - TestDockerFileLint
+              - Name: DockerFileLint
+                ActionTypeId:
+                  Category: Build
+                  Owner: AWS
+                  Version: "1"
+                  Provider: CodeBuild
+                OutputArtifacts:
+                  - Name: DockerFileLint
+                InputArtifacts:
+                  - Name: Source
+                Configuration:
+                  ProjectName: !Ref cbDockerFileLint
+                RunOrder: 1
+              - !Ref AWS::NoValue
 
-          - !If
-            - TestDockerFileLint
-            - Name: DockerFileLint
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: "1"
-                Provider: CodeBuild
-              OutputArtifacts:
-                - Name: DockerFileLint
-              InputArtifacts:
-                - Name: Source
-              Configuration:
-                ProjectName: !Ref cbDockerFileLint
-              RunOrder: 1
-            - !Ref AWS::NoValue
+            - !If
+              - TestContainerSecurity
+              - Name: ContainerSecurity
+                ActionTypeId:
+                  Category: Build
+                  Owner: AWS
+                  Version: "1"
+                  Provider: CodeBuild
+                OutputArtifacts:
+                  - Name: ContainerSecurity
+                InputArtifacts:
+                  - Name: Source
+                Configuration:
+                  ProjectName: !Ref cbContainerSecurity
+                  EnvironmentVariables: !Sub |
+                    [
+                      {
+                        "name":"ServiceName",
+                        "value":"${ServiceName}",
+                        "type":"PLAINTEXT"
+                      },
+                      {
+                        "name":"BranchName",
+                        "value":"${BranchName}",
+                        "type":"PLAINTEXT"
+                      },
+                      {
+                        "name":"GitCommitID",
+                        "value":"#{SourceVariables.CommitId}",
+                        "type":"PLAINTEXT"
+                      }
+                    ]
+                RunOrder: 2
+              - !Ref AWS::NoValue
 
-          - !If
-            - BuildCreateStage
-            - Name: Build
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: "1"
-                Provider: CodeBuild
-              OutputArtifacts:
-                - Name: Build
-              InputArtifacts:
-                - Name: Source
-              Configuration:
-                ProjectName: !Ref cbBuild
-                EnvironmentVariables: !Sub |
-                  [
-                    {
-                      "name":"Language",
-                      "value":"${Language}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"ServiceName",
-                      "value":"${ServiceName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"BranchName",
-                      "value":"${BranchName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"GitCommitID",
-                      "value":"#{SourceVariables.CommitId}",
-                      "type":"PLAINTEXT"
-                    }
-                  ]
-              RunOrder: 2
-            - !Ref AWS::NoValue
-
-          - !If
-            - TestContainerSecurity
-            - Name: ContainerSecurity
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: "1"
-                Provider: CodeBuild
-              OutputArtifacts:
-                - Name: ContainerSecurity
-              InputArtifacts:
-                - Name: Source
-              Configuration:
-                ProjectName: !Ref cbContainerSecurity
-                EnvironmentVariables: !Sub |
-                  [
-                    {
-                      "name":"ServiceName",
-                      "value":"${ServiceName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"BranchName",
-                      "value":"${BranchName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"GitCommitID",
-                      "value":"#{SourceVariables.CommitId}",
-                      "type":"PLAINTEXT"
-                    }
-                  ]
-              RunOrder: 3
-            - !Ref AWS::NoValue
-
-          - !If
-            - TestSastSecurity
-            - Name: SastSecurity
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: "1"
-                Provider: CodeBuild
-              OutputArtifacts:
-                - Name: SastSecurity
-              InputArtifacts:
-                - Name: Source
-              Configuration:
-                ProjectName: !Ref cbSastSecurity
-                EnvironmentVariables: !Sub |
-                  [
-                    {
-                      "name":"ServiceName",
-                      "value":"${ServiceName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"BranchName",
-                      "value":"${BranchName}",
-                      "type":"PLAINTEXT"
-                    },
-                    {
-                      "name":"GitCommitID",
-                      "value":"#{SourceVariables.CommitId}",
-                      "type":"PLAINTEXT"
-                    }
-                  ]
-              RunOrder: 3
-            - !Ref AWS::NoValue
+            - !If
+              - TestSastSecurity
+              - Name: SastSecurity
+                ActionTypeId:
+                  Category: Build
+                  Owner: AWS
+                  Version: "1"
+                  Provider: CodeBuild
+                OutputArtifacts:
+                  - Name: SastSecurity
+                InputArtifacts:
+                  - Name: Source
+                Configuration:
+                  ProjectName: !Ref cbSastSecurity
+                  EnvironmentVariables: !Sub |
+                    [
+                      {
+                        "name":"ServiceName",
+                        "value":"${ServiceName}",
+                        "type":"PLAINTEXT"
+                      },
+                      {
+                        "name":"BranchName",
+                        "value":"${BranchName}",
+                        "type":"PLAINTEXT"
+                      },
+                      {
+                        "name":"GitCommitID",
+                        "value":"#{SourceVariables.CommitId}",
+                        "type":"PLAINTEXT"
+                      }
+                    ]
+                RunOrder: 2
+              - !Ref AWS::NoValue
 
 
         #-----------------------------------------------------------------------------#
@@ -371,11 +263,6 @@ Resources:
                 ProjectName: !Ref cbPublish
                 EnvironmentVariables: !Sub |
                   [
-                    {
-                      "name":"ContainerService",
-                      "value":"${ContainerService}",
-                      "type":"PLAINTEXT"
-                    },
                     {
                       "name":"ServiceName",
                       "value":"${ServiceName}",
@@ -433,25 +320,7 @@ Resources:
   #-----------------------------------------------------------------------------#
   # CodeBuild Project
   #-----------------------------------------------------------------------------#
-  cbBuild:
-    Condition: BuildCreateStage
-    Type: AWS::CodeBuild::Project
-    Properties:
-      EncryptionKey: !Ref KmsArn
-      Artifacts:
-        Type: CODEPIPELINE
-      ServiceRole: !GetAtt CodeBuildRole.Arn
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:2.0
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/${Language}.yaml
-      TimeoutInMinutes: 10
-
   cbGitSecrets:
-    Condition: TestGitSecrets
     Type: AWS::CodeBuild::Project
     Properties:
       EncryptionKey: !Ref KmsArn
@@ -464,11 +333,10 @@ Resources:
         Image: aws/codebuild/standard:2.0
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/git-secrets.yaml
+        BuildSpec: buildspec/git-secrets.yaml
       TimeoutInMinutes: 10
 
   cbCfnLint:
-    Condition: TestCfnLint
     Type: AWS::CodeBuild::Project
     Properties:
       EncryptionKey: !Ref KmsArn
@@ -481,7 +349,7 @@ Resources:
         Image: aws/codebuild/standard:2.0
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/cfn-lint.yaml
+        BuildSpec: buildspec/cfn-lint.yaml
       TimeoutInMinutes: 10
 
   cbDockerFileLint:
@@ -499,7 +367,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/hadolint.yaml
+        BuildSpec: buildspec/hadolint.yaml
       TimeoutInMinutes: 10
 
   cbSastSecurity:
@@ -517,7 +385,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/safety.yaml
+        BuildSpec: buildspec/safety.yaml
       TimeoutInMinutes: 10
 
   cbContainerSecurity:
@@ -535,7 +403,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/container-sec.yaml
+        BuildSpec: buildspec/container-sec.yaml
       TimeoutInMinutes: 10
 
   cbPublish:
@@ -552,7 +420,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: !Sub buildspec/ecr.yaml
+        BuildSpec: buildspec/ecr.yaml
       TimeoutInMinutes: 10
 
 
