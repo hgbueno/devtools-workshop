@@ -1,9 +1,15 @@
 # AWS BlackBelt | *Application Modernization*
+
 ![AWS BlackBelt ](img/bb_logo.png)
 
-***Workshop AWS DevTools***
+## Workshop AWS DevTools*
+Tópicos:
+1. Preparação do ambiente
+2. Criação das stacks de fundação
+3. Criação do primeiro micro-serviço
+4. Criação de pipelines para novas branches
+5. Disponibilizando o template pelo Service Catalog
 
-<br />
 <br />
 <br />
 
