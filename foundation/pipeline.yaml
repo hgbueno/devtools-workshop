@@ -144,6 +144,7 @@ Resources:
         #-----------------------------------------------------------------------------#
         - Name: "Continuous_Integration"
           Actions:
+
             - Name: GitSecrets
               ActionTypeId:
                 Category: Build
@@ -188,6 +189,20 @@ Resources:
                       "type":"PLAINTEXT"
                     }
                   ]
+              RunOrder: 1
+
+            - Name: CFN-Nag
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: "1"
+                Provider: CodeBuild
+              OutputArtifacts:
+                - Name: CFN-Nag
+              InputArtifacts:
+                - Name: Source
+              Configuration:
+                ProjectName: !Ref cbCfnNag
               RunOrder: 1
 
             - !If
@@ -370,6 +385,22 @@ Resources:
         BuildSpec: buildspec/git-secrets.yaml
       TimeoutInMinutes: 10
 
+  cbCfnNag:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      EncryptionKey: !Ref KmsArn
+      Artifacts:
+        Type: CODEPIPELINE
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:2.0
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: buildspec/cfn-nag.yaml
+      TimeoutInMinutes: 10
+
   cbUnitTest:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -384,23 +415,6 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: buildspec/unit-test.yaml
-      TimeoutInMinutes: 10
-
-
-  cbCfnLint:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      EncryptionKey: !Ref KmsArn
-      Artifacts:
-        Type: CODEPIPELINE
-      ServiceRole: !GetAtt CodeBuildRole.Arn
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:2.0
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: buildspec/cfn-lint.yaml
       TimeoutInMinutes: 10
 
   cbDockerFileLint:
@@ -436,7 +450,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: buildspec/safety.yaml
+        BuildSpec: buildspec/sast.yaml
       TimeoutInMinutes: 10
 
   cbContainerSecurity:
@@ -454,7 +468,7 @@ Resources:
         PrivilegedMode: true
       Source:
         Type: CODEPIPELINE
-        BuildSpec: buildspec/container-sec.yaml
+        BuildSpec: buildspec/trivy.yaml
       TimeoutInMinutes: 10
 
   cbPublish:

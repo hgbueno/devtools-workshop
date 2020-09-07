@@ -19,6 +19,8 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 * ***Unit Test & Test Coverage***
     * [Unit testing framework](https://docs.python.org/3/library/unittest.html)
     * [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.2.1/)
+* ***CFN_Nag***
+    * [GFN_Nag](https://github.com/stelligent/cfn_nag)
 * ***DockerFile Lint***
     * [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * ***SAST***
@@ -128,7 +130,7 @@ aws cloudformation deploy \
 ### 3.1 Crie a stack para o micro-serviço
 
 #### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
-* **Stack name:** myapp
+* **Stack name:** pipeline-myapp
 * **ServiceName:** myapp
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
@@ -195,7 +197,7 @@ git push origin develop
 ```
 
 #### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
-* **Stack name:** myapp-develop
+* **Stack name:** pipeline-myapp-develop
 * **ServiceName:** myapp (mesmo nome do serviço criado anteriormente)
 * **BranchName:** develop
 > *Não é necessário alterar os valores dos demais parâmetros.*
