@@ -1,6 +1,6 @@
 
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Launcher - CI/CD (trunk-based)"
+Description: "DevTools - Pipeline"
 
 Parameters:
   ServiceName:
