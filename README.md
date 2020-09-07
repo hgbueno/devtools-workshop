@@ -80,12 +80,18 @@ aws cloudformation deploy \
 
 
 #### Crie a stack para o micro-serviço
-* Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml**
+* Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+    * Stack name: myapp
+    * ServiceName: myapp
+    <br \>
+    *Não é necessário alterar os valores dos demais parâmetros.*
+
 * Verifique se a pipeline foi criada no CodePipeline.
 * Verifique se o repositório foi criado no CodeCommit.
 
 #### Clone o novo repositório e copie os arquivos da aplicação.
 * Clone o repositório
+
 <br \>
 Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
 Na sua máquina, execute:
