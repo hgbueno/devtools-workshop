@@ -33,6 +33,14 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 > * [Criação de um usuário do IAM na sua conta da AWS](https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/id_users_create.html#id_users_create_console)
 > * [Configuração para usuários de HTTPS usando credenciais do Git](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/setting-up-gc.html)
 
+
+6. Confirme se a nova credencial está funcionando.
+    * Crie um repositório apenas para teste.
+    * Clone o repositório em sua máquina utilizando a nova credencial.
+    * Delete o repositório.
+
+> [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
+
 ----
 
 ### **Criação das stacks de fundação**
