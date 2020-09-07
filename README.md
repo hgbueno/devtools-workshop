@@ -15,7 +15,7 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 
 #### Testes aplicados na pipeline:
 * Git Secrets
-* SAST
+* Dependency Check
 * DockerFile Lint (Hadolint)
 * Container Security
 
@@ -26,7 +26,8 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 2. Criação das stacks de fundação
 3. Criação do primeiro micro-serviço
 4. Criação de pipelines para novas branches
-5. Disponibilizando o template pelo Service Catalog
+5. Adicionando testes na pipeline
+6. Disponibilizando o template pelo Service Catalog
 
 <br />
 <br />
@@ -74,10 +75,10 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 
 ## 2. Criação das stacks de fundação
 > Seguindo a boa prática para segmentar stacks em camadas, criaremos 3 stacks:
-> * **1. Netwoking:** Toda a infraestrutura de VPC e conectividade em multi-az (2), incluindo o Application Load Balancer.
+> * **1. Netwoking:** Toda a infraestrutura de VPC e conectividade em multi-az(2), incluindo o Application Load Balancer.
 > * **2. Common:** Recursos que serão compartilhados entre todas os micro-serviços que criaremos. KMS e S3 Bucket.
 > * **3. Fargate:** Cluster Fargate.
-
+>
 > [Melhores práticas do AWS CloudFormation](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html)
 
 ### 2.1 Networking
@@ -123,8 +124,8 @@ aws cloudformation deploy \
 * **ServiceName:** myapp
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
-* Verifique que a pipeline foi criada no CodePipeline.
 * Verifique que o repositório foi criado no CodeCommit.
+* Verifique que a pipeline foi criada no CodePipeline.
 
 
 ### 3.2 Clone o novo repositório e copie os arquivos da aplicação.
@@ -146,7 +147,7 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 * templates/service.yaml
     * **ServiceName:** myapp
     * **ServicePath:** myapp/
-    * **BranchName:** myapp
+    * **BranchName:** master
     * **ContainerPort:** 5000
     * **AlbRulePriority:** 2
 
@@ -162,3 +163,42 @@ git push origin master
 <br />
 <br />
 <br />
+
+
+## 4. Criação de pipelines para novas branches
+
+### 4.1 Crie uma nova branch
+```
+git checkout -b develop
+```
+
+### 4.2 Edite os seguintes arquivos para o novo micro-serviço:
+
+* templates/service.yaml
+    * **ServiceName:** myapp
+    * **ServicePath:** /myapp-develop
+    * **BranchName:** develop
+    * **ContainerPort:** 5000
+    * **AlbRulePriority:** 3 (AlbRulePriority + 1)
+
+* app/main.py
+    *  **@app.route("/myapp-develop")**
+
+#### Envie as mudanças para repositório
+```
+git add .
+git commit -m "first commit"
+git push origin develop
+```
+<br />
+<br />
+<br />
+
+
+## 5. Adicionando estágios de testes na pipeline
+
+### 5.1 Abra os arquivos buildspec
+* buildspec/git-secrets.yaml
+* buildspec/container-security.yaml
+* buildspec/dependency-check.yaml
+* buildspec/dockerfile-lint.yaml
