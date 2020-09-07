@@ -4,6 +4,8 @@
 
 ## Workshop AWS DevTools
 
+![CI/CD ](img/ci-cd.png)
+
 ### Visão Geral
 Este workshop guiará você na criação de um ambiente para execução de um micro-serviço de exemplo rodando no AWS Fargate.
 
@@ -44,7 +46,7 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 
 ## 1. Preparação do ambiente para o workshop
 
-### 1.1 Valide o acesso à sua conta no EventEngine através da console.
+### 1.1 Valide o acesso à sua conta no Event Engine através da console.
 > *informações enviadas por e-mail*
 > * [Event Engine](https://dashboard.eventengine.run/login)
 

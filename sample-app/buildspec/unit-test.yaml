@@ -14,5 +14,5 @@ phases:
       - python -m unittest *.py
       - echo "Running Test Coverage Analisys..."
       - coverage run main.py
-      - coverage report -m --fail-under 70 > $CommitID.txt
+      - coverage report -m --fail-under 70 2>&1 | tee $CommitID.txt
       - aws s3 cp $CommitID.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/unit-test-$CommitID.txt

@@ -8,6 +8,15 @@ Parameters:
   BranchName:
     Type: String
     Default: master
+  Email:
+    Type: String
+    Description: Your e-mail
+  ManualApproval:
+    Type: String
+    Default: true
+    AllowedValues:
+      - true
+      - false
   TestDockerFileLint:
     Type: String
     Default: false
@@ -45,6 +54,8 @@ Metadata:
         Parameters:
           - ServiceName
           - BranchName
+          - Email
+          - ManualApproval
       -
         Label:
           default: "Pipeline - Tests"
@@ -62,12 +73,23 @@ Metadata:
 
 Conditions:
   MasterBranch: !Equals [ !Ref BranchName, "master" ]
+  ManualApproval: !Not [ !Equals [ !Ref ManualApproval, "false" ] ]
   TestDockerFileLint: !Not [ !Equals [ !Ref TestDockerFileLint, "false" ] ]
   TestSastSecurity: !Not [ !Equals [ !Ref TestSastSecurity, "false" ] ]
   TestContainerSecurity: !Not [ !Equals [ !Ref TestContainerSecurity, "false" ] ]
 
 
 Resources:
+
+  #-----------------------------------------------------------------------------#
+  # SNS
+  #-----------------------------------------------------------------------------#
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: !Ref Email
+          Protocol: email
 
   #-----------------------------------------------------------------------------#
   # CodeCommit
@@ -335,6 +357,22 @@ Resources:
         #-----------------------------------------------------------------------------#
         - Name: Deploy
           Actions:
+
+            - !If
+              - ManualApproval
+              - Name: ManualApproval
+                ActionTypeId:
+                  Category: Approval
+                  Owner: AWS
+                  Version: "1"
+                  Provider: Manual
+                Configuration:
+                  CustomData: "Aguardando aprovação manual"
+                  NotificationArn: !Ref SNSTopic
+                RunOrder: 1
+              - !Ref AWS::NoValue
+
+
             - Name: Service
               ActionTypeId:
                 Category: Deploy
@@ -350,7 +388,7 @@ Resources:
                 TemplatePath: "Source::templates/service.yaml"
               InputArtifacts:
                 - Name: Source
-              RunOrder: 1
+              RunOrder: 2
             - Name: Task
               ActionTypeId:
                 Category: Deploy
@@ -363,7 +401,7 @@ Resources:
                 FileName: taskdef.json
               InputArtifacts:
                 - Name: Publish
-              RunOrder: 2
+              RunOrder: 3
 
 
   #-----------------------------------------------------------------------------#
@@ -469,7 +507,7 @@ Resources:
       Source:
         Type: CODEPIPELINE
         BuildSpec: buildspec/trivy.yaml
-      TimeoutInMinutes: 10
+      TimeoutInMinutes: 20
 
   cbPublish:
     Type: AWS::CodeBuild::Project
