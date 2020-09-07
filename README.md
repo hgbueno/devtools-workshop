@@ -14,19 +14,25 @@
 2. Instale a ***aws cli*** e crie um novo profile para a sua conta.<br />
 [Como instalar](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 <br />
+
 [Como configurar](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 <br />
 
 3. Valide a configuração do seu profile.
-* O comando abaixo deverá retornar seu AccountId:
+<br />
+O comando abaixo deverá retornar seu AccountId:
 ```bash
 aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
+<br />
+
 
 4. Clone este repositório.
 ```
 git clone https://github.com/hgbueno/devtools-workshop.git
 ```
+<br />
+
 ----
 
 ### **Criação das Stacks de fundação**
