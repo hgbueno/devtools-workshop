@@ -15,9 +15,18 @@ Este workshop guiará você na criação de um ambiente para execução de um mi
 
 #### Testes aplicados na pipeline:
 * Git Secrets
-* Dependency Check
-* DockerFile Lint (Hadolint)
+> [Git Secrets](https://github.com/awslabs/git-secrets)
+* Unit Test & Test Coverage
+> [Unit testing framework](https://docs.python.org/3/library/unittest.html)
+> [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.2.1/)
+* SAST
+> [OWASP Dependency Check](https://pypi.org/project/dependency-check/)
+> [Safety](https://github.com/pyupio/safety)
+> [Bandit](https://github.com/PyCQA/bandit)
+* DockerFile Lint
+> [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * Container Security
+> [Trivy](https://github.com/aquasecurity/trivy)
 
 
 ### Tópicos:

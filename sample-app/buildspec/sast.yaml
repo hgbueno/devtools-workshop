@@ -4,9 +4,18 @@ phases:
   install:
     commands:
       - pip install dependency-check
+      - pip install safety
+      - pip install bandit
   build:
     commands:
       - AccountID=$(aws sts get-caller-identity --query Account --output text)
       - CommitID="$(echo $GitCommitID | head -c 8)"
+      - echo "Running Dependency Check..."
       - dependency-check --disableAssembly -s . -o $CommitID.html
-      - aws s3 cp $CommitID.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/dependency-check-$CommitID.html
+      - aws s3 cp $CommitID.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-dependency-check-$CommitID.html
+      - echo "Running Safety..."
+      - safety check --full-report --output insecure_report.txt
+      - aws s3 cp insecure_report.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-safety-$CommitID.html
+      - echo "Running Bandit..."
+      - bandit -r app/ -f html -o report.html
+      - aws s3 cp report-html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-bandit-$CommitID.html
