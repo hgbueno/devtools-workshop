@@ -2,6 +2,8 @@
 
 ![AWS BlackBelt ](img/bb_logo.png)
 
+# Workshop AWS DevTools
+
 ## Tópicos:
 
 ### [1. Preparação do ambiente para o workshop](https://github.com/hgbueno/devtools-workshop#1-preparação-do-ambiente-para-o-workshop)
@@ -13,7 +15,6 @@
 <br />
 <br />
 
-## Workshop AWS DevTools
 
 ![CI/CD ](img/ci-cd.png)
 
