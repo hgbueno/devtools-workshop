@@ -11,14 +11,19 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 
 
 ### Stack
-![Stack ](img/stack.png)
+
 * **Linguagem:** Python
 * **Repositório:** CodeCommit
 * **Pipeline:** CodePipeline + CodeBuild + CodeDeploy
 * **Recurso computacional:** ECS Fargate
 
+![Stack ](img/stack.png)
+
+
 ### Testes aplicados na pipeline:
+
 ![Testes](img/tests.png)
+
 * ***Git Secrets***
     * [Git Secrets](https://github.com/awslabs/git-secrets)
 * ***Unit Test & Test Coverage***
