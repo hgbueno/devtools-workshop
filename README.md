@@ -7,7 +7,7 @@
 ![CI/CD ](img/ci-cd.png)
 
 ### Visão Geral
-Este workshop guiará você na criação de um ambiente para execução de um micro-serviço de exemplo rodando no AWS Fargate.
+Implemente pipelines CI/CD para micro-serviços em python rodando em container no Fargate.
 
 #### Stack
 * **Linguagem:** Python
@@ -220,15 +220,6 @@ git push origin develop
 * Através da console do Cloudformation, edite a stack da pipeline master, selecionando a opção ***Use current template***.
 * Habilite os demais testes que estavam desabilitados.
 * Após concluir a atualização, vá até a pipeline no console do CodePipeline e clique em ***Release Changes***.
-
-
-### 5.2 Abra os arquivos buildspec
-* Enquanto a pipeline está rodando, aproveite para dar uma olhada nos arquivos buildspec de cada projeto do CodeBuild:
-    * buildspec/git-secrets.yaml
-    * buildspec/unit-test.yaml
-    * buildspec/sast.yaml
-    * buildspec/hadolint.yaml
-    * buildspec/trivy.yaml
 
 <br />
 <br />
