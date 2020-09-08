@@ -12,13 +12,9 @@ phases:
       - dpkg -i trivy_${VERSION}_Linux-64bit.deb
   build:
     commands:
-      - docker build -t trivy:test .
-  build:
-    commands:
       - AccountID=$(aws sts get-caller-identity --query Account --output text)
       - CommitID="$(echo $GitCommitID | head -c 8)"
-  post_build:
-    commands:
+      - docker build -t trivy:test .
       - trivy --no-progress --exit-code 1 --severity HIGH,CRITICAL trivy:test 2>&1 | tee report.txt
       - aws s3 cp report.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/container-sec-trivy-$CommitID.txt
       - echo "Trivy execution Finished..."

@@ -11,11 +11,16 @@ phases:
       - AccountID=$(aws sts get-caller-identity --query Account --output text)
       - CommitID="$(echo $GitCommitID | head -c 8)"
       - echo "Running Dependency Check..."
-      - dependency-check --disableAssembly -s . -o $CommitID.html
+      - DEPENDENCY_CHECK_VERSION=6.0.0
+      - rm -rf ~/.local/dependency-check/bin/
+      - dependency-check
+      - dependency-check --enableExperimental -s . -o $CommitID.html
       - aws s3 cp $CommitID.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-dependency-check-$CommitID.html
       - echo "Running Safety..."
       - safety check --full-report --output insecure_report.txt
+      - cat insecure_report.txt
       - aws s3 cp insecure_report.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-safety-$CommitID.txt
       - echo "Running Bandit..."
-      - bandit -r app/ -f html -o report.html
-      - aws s3 cp report.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-bandit-$CommitID.html
+      - bandit -r . -f txt -o bandit-report.txt
+      - cat bandit-report.txt
+      - aws s3 cp bandit-report.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-bandit-$CommitID.txt
