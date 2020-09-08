@@ -157,9 +157,12 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 ```
 
 #### Edite os seguintes arquivos para o novo micro-serviço:
+> ATENÇÃO NESTE PASSO!
 * templates/service.yaml
     * **ServiceName:** myapp
-    * **ServicePath:** myapp/
+    * **ServicePath:** /myapp
+    * **BranchName:** master
+    * **AlbRulePriority:** 2 (AlbRulePriority+1) ***Este número nunca deve ser repetido entre os micro-serviços***
 
 * app/main.py
     *  **mypath="myapp"**

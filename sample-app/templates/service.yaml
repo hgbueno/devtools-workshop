@@ -5,37 +5,37 @@ Parameters:
 
   ServiceName:
     Type: String
-    Default: myapp2
+    Default: myapp
     Description: Service Name
   ServicePath:
     Type: String
-    Default: /myapp2
+    Default: /myapp
     Description: Service Name
   BranchName:
     Type: String
     Default: master
     Description: Branch Name
-  ContainerPort:
-    Type: Number
-    Default: 5000
-    Description: What port number the application inside the docker container is binding to
   AlbRulePriority:
     Type: Number
     Default: 2
     Description: The priority for the routing rule added to the load balancer.
                  This only applies if your have multiple services which have been
                  assigned to different paths on the load balancer.
+  ContainerPort:
+    Type: Number
+    Default: 5000
+    Description: What port number the application inside the docker container is binding to
   AsContainersMin:
     Type: Number
-    Default: 2
+    Default: 1
     Description: Min mumber of tasks
   AsContainersMax:
     Type: Number
-    Default: 10
+    Default: 6
     Description: Max mumber of tasks
   AsContainersDesired:
     Type: Number
-    Default: 3
+    Default: 2
     Description: Desired number of tasks
   AsTargetCpuUtilization:
     Type: Number
