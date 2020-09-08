@@ -134,6 +134,7 @@ aws cloudformation deploy \
 #### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp
 * **ServiceName:** myapp
+* **Email:** <seu_email>
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
 * Verifique que o repositório foi criado no CodeCommit.
