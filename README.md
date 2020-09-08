@@ -2,20 +2,20 @@
 
 ![AWS BlackBelt ](img/bb_logo.png)
 
+## Tópicos:
+
+### [1. Preparação do ambiente para o workshop](https://github.com/hgbueno/devtools-workshop#1-preparação-do-ambiente-para-o-workshop)
+### [2. Criação das stacks de fundação](https://github.com/hgbueno/devtools-workshop#2-criação-das-stacks-de-fundação)
+### [3. Criação do primeiro micro-serviço](https://github.com/hgbueno/devtools-workshop#3-criação-o-primeiro-micro-serviço)
+### [4. Criação de pipelines para novas branches](https://github.com/hgbueno/devtools-workshop#4-criação-de-pipelines-para-novas-branches)
+### [5. Adicionando testes na pipeline](https://github.com/hgbueno/devtools-workshop#5-adicionando-estágios-de-testes-na-pipeline)
+
+<br />
+<br />
+
 ## Workshop AWS DevTools
 
 ![CI/CD ](img/ci-cd.png)
-
-### Tópicos:
-
-#### 1. [Preparação do ambiente para o workshop](https://github.com/hgbueno/devtools-workshop#1-preparação-do-ambiente-para-o-workshop)
-#### 2. [Criação das stacks de fundação](https://github.com/hgbueno/devtools-workshop#2-criação-das-stacks-de-fundação)
-#### 3. [Criação do primeiro micro-serviço](https://github.com/hgbueno/devtools-workshop#3-criação-o-primeiro-micro-serviço)
-#### 4. [Criação de pipelines para novas branches](https://github.com/hgbueno/devtools-workshop#4-criação-de-pipelines-para-novas-branches)
-#### 5. [Adicionando testes na pipeline](https://github.com/hgbueno/devtools-workshop#5-adicionando-estágios-de-testes-na-pipeline)
-
-<br />
-<br />
 
 ### Visão Geral
 Implemente pipelines CI/CD para micro-serviços em python rodando em container no Fargate.
@@ -27,6 +27,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 * **Recurso computacional:** ECS Fargate
 
 #### Testes aplicados na pipeline:
+![Testes](img/tests.png)
 * ***Git Secrets***
     * [Git Secrets](https://github.com/awslabs/git-secrets)
 * ***Unit Test & Test Coverage***
@@ -43,8 +44,8 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 * ***Container Security***
     * [Trivy](https://github.com/aquasecurity/trivy)
 
-![Testes](img/tests.png)
-
+<br />
+<br />
 ## 1. Preparação do ambiente para o workshop
 
 ### 1.1 Valide o acesso à sua conta no Event Engine através da console.
