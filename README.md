@@ -133,8 +133,7 @@ aws cloudformation deploy \
 
 
 ### 3.1 Crie a stack para o micro-serviço
-
-#### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp
 * **ServiceName:** myapp
 * **Email:** <seu_email>
@@ -228,7 +227,7 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 * Verifique que a pipeline foi criada no CodePipeline.
 > Não será criado um novo repositório como da primeira vez porque existe uma ***condition*** no Cloudformation para apenas criar o repositório quando a branch informada for a ***master***.
 
-#### Valide a execução da pipeline
+### 4.5 Valide a execução da pipeline
 
 <br />
 <br />
