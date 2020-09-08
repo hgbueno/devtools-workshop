@@ -11,6 +11,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 
 
 ### Stack
+![Stack ](img/stack.png)
 * **Linguagem:** Python
 * **Repositório:** CodeCommit
 * **Pipeline:** CodePipeline + CodeBuild + CodeDeploy
