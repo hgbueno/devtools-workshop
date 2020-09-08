@@ -57,6 +57,16 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 > * [Como instalar a aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 > * [Como configurar um novo profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
+* Exemplo de configuração do arquivo ~/.aws/credentials
+
+```
+[myprofile]
+aws_access_key_id = <your_access_key>
+aws_secret_access_key = <your_secret_key>
+aws_session_token = <your_token>
+```
+
+
 ### 1.3 Valide a configuração do seu profile.
 O comando abaixo deverá retornar seu **AccountId**:
 ```
@@ -243,3 +253,16 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 
 <br />
 <br />
+
+
+## Workshops relacionados
+* [Adding Security into DevOps](https://devops.awssecworkshops.com)
+* [Integrating security into your container pipeline](https://container-devsecops.awssecworkshops.com)
+* [Amazon ECS Workshop for AWS Fargate](https://ecsworkshop.com)
+* [Amazon EKS Workshop](https://www.eksworkshop.com)
+* [Build a Modern Application on AWS](https://github.com/aws-samples/aws-modern-application-workshop)
+* [CDK Workshop](https://cdkworkshop.com)
+* [AWS App Mesh Workshop](https://www.appmeshworkshop.com)
+* [Amazon CodeGuru](https://awsdemoworkshops.s3.us-east-2.amazonaws.com/codeguru/public/en/index.html)
+* [CI/CD with Fargate](https://awsdemoworkshops.s3.us-east-2.amazonaws.com/cicd-fargate-bg-workshop/public/en/index.html)
+* [CI/CD for Serverless Applications](https://cicd.serverlessworkshops.io)
