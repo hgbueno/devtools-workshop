@@ -280,6 +280,10 @@ Na [Console do Cloudformation](https://console.aws.amazon.com/cloudformation/hom
 <br />
 
 
+## Conteúdo adicional
+* [Multi-branch CodePipeline strategy with event-driven architecture](https://aws.amazon.com/blogs/devops/multi-branch-codepipeline-strategy-with-event-driven-architecture/)
+
+
 ## Workshops relacionados
 * [Adding Security into DevOps](https://devops.awssecworkshops.com)
 * [Integrating security into your container pipeline](https://container-devsecops.awssecworkshops.com)
