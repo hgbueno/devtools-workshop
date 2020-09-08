@@ -150,8 +150,10 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 * **Email:** <seu_email>
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
+* **Você receberá um e-mail para confirmar a inscrição no tópico SNS. Faça essa confirmação antes de prosseguir.**
 * Verifique que o repositório foi criado no CodeCommit.
 * Verifique que a pipeline foi criada no CodePipeline.
+
 
 
 ### 3.2 Clone o novo repositório e copie os arquivos da aplicação.
@@ -193,8 +195,10 @@ git push origin master
 * Após o estágio de Publish, você receberá um e-mail solicitando aprovação para seguir com a pipeline.
 * Acesse a URL do Load Balancer adicionando o path do seu microserviço para vê-lo funcionando.
     * Para pegar a URL do Load Balancer, vá até a Console do Cloudformation, acesse a stack **networking** e clique em Outputs.
-    * Ao final desta URL, adicione "***/myapp***".
+    * Ao final da URL, adicione "***/myapp***".
+    * ***Obs: Este passo somente funcionará após iniciar o deploy do serviço. (penúltimo estágio da pipeline).***
 * Atualize (refresh) algumas vezes a página para conferir que as conexões estão sendo balanceadas entre as duas AZ's.
+    * ***Obs: Este passo somente funcionará após iniciar o deploy do serviço. (penúltimo estágio da pipeline).***
 
 <br />
 <br />
