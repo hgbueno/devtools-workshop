@@ -151,7 +151,7 @@ aws cloudformation deploy \
 
 
 ### 3.1 Crie a stack para o micro-serviço
-Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+Na [Console do Cloudformation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#), crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp
 * **ServiceName:** myapp
 * **Email:** <seu_email>
@@ -167,7 +167,7 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 
 #### Clone o repositório
 
-* Acesse seu repositório do CodeCommit pela console web, clique em **Clone URL**, depois em **Clone HTTPS**.
+* Acesse a [Console do CodeCommit](https://console.aws.amazon.com/codesuite/codecommit/home?region=us-east-1#), clique em **Clone URL**, depois em **Clone HTTPS**.
 * Na sua máquina, execute:
 ```
 git clone <RepoURL>
@@ -197,6 +197,7 @@ git push origin master
 ```
 
 ### 3.5 Acompanhe a execução da pipeline
+* Acesse a [Console do CodePipeline](https://console.aws.amazon.com/codesuite/codepipeline/pipelines?region=us-east-1)
 * Acompanhe os logs de execução de cada job do CodeBuild.
 * Valide que os relatórios de execução estão sendo salvos no Bucket S3
 * Após o estágio de Publish, você receberá um e-mail solicitando aprovação para seguir com a pipeline.
@@ -223,9 +224,9 @@ git checkout -b develop
 > ATENÇÃO NESTE PASSO!
 * templates/service.yaml
     * **ServiceName:** myapp ***(este parâmetro não muda!)***
-    * **ServicePath:** /myapp-develop ***(este é o path que será usado no ALB)***
+    * **ServicePath:** /myapp-develop ***(este é o path que será usado no ALB para o novo micro-serviço)***
     * **BranchName:** develop
-    * **AlbRulePriority:** 3 (AlbRulePriority+1) ***Este número nunca deve ser repetido entre os micro-serviços***
+    * **AlbRulePriority:** 3 (AlbRulePriority+1) ***ATENÇÃO! Este número nunca deve ser repetido entre os micro-serviços***
 
 * app/main.py
     *  **mypath="myapp-develop"**
@@ -238,7 +239,7 @@ git push origin develop
 ```
 
 ### 4.4 Crie uma nova pipeline para a branch develop
-Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+Na [Console do Cloudformation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#), crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp-develop
 * **ServiceName:** myapp ***(mesmo nome do serviço criado anteriormente)***
 * **BranchName:** develop
@@ -265,7 +266,7 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 ## 5. Adicionando estágios de testes na pipeline
 
 ### 5.1 Edite a pipeline master
-* Através da console do Cloudformation, edite a stack da pipeline master ***(pipeline-myapp)***, selecionando a opção ***Use current template***.
+* Na [Console do Cloudformation](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#), edite a stack da pipeline master ***(pipeline-myapp)***, selecionando a opção ***Use current template***.
 * Habilite os demais testes que estavam desabilitados.
 * Após concluir a atualização, vá até a pipeline no console do CodePipeline e clique em ***Release Changes***.
 
