@@ -216,7 +216,7 @@ git push origin develop
 * **Stack name:** pipeline-myapp-develop
 * **ServiceName:** myapp ***(mesmo nome do serviço criado anteriormente)***
 * **BranchName:** develop
-* **Email:** (não precisa preencher)
+* **Email:** seu@email.com
 * **ManualApproval:** false
 > *Não é necessário alterar os valores dos demais parâmetros.*
 

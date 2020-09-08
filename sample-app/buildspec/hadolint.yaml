@@ -10,7 +10,7 @@ phases:
         - echo Build started on `date`
         - echo Scanning with Hadolint...
         - # rules: https://github.com/hadolint/hadolint#rules
-        - result=`docker run --rm -i hadolint/hadolint:v1.16.2 hadolint --ignore DL3008 -f json - < Dockerfile`
+        - result=`docker run --rm -i hadolint/hadolint:v1.16.2 hadolint --ignore DL3008 --ignore DL3015 -f json - < Dockerfile`
     post_build:
         commands:
         - echo $result
