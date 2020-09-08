@@ -86,6 +86,7 @@ Resources:
   # SNS
   #-----------------------------------------------------------------------------#
   SNSTopic:
+    Condition: ManualApproval
     Type: AWS::SNS::Topic
     Properties:
       Subscription:
