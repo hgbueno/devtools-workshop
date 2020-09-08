@@ -159,7 +159,7 @@ git clone <RepoURL>
 cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 ```
 
-#### Edite os seguintes arquivos para o novo micro-serviço:
+### 3.3 Configure os parâmetros para o micro-serviço
 > ATENÇÃO NESTE PASSO!
 * templates/service.yaml
     * **ServiceName:** myapp
@@ -170,13 +170,14 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 * app/main.py
     *  **mypath="myapp"**
 
-#### Envie o código para repositório
+### 3.4 Envie o código para repositório
 ```
 git add .
 git commit -m "first commit"
 git push origin master
 ```
-#### Acompanhe a execução da pipeline
+
+### 3.5 Acompanhe a execução da pipeline
 * Acompanhe os logs de execução de cada job do CodeBuild.
 * Valide que os relatórios de execução estão sendo salvos no Bucket S3
 * Após o estágio de Publish, você receberá um e-mail solicitando aprovação para seguir com a pipeline.
