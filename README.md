@@ -35,7 +35,6 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
     * [Trivy](https://github.com/aquasecurity/trivy)
 
 <br />
-<br />
 
 ## Tópicos:
 
@@ -47,6 +46,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 
 <br />
 <br />
+
 ## 1. Preparação do ambiente para o workshop
 
 ### 1.1 Valide o acesso à sua conta no Event Engine através da console.
