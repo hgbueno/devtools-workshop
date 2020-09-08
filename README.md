@@ -24,7 +24,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
     * [Unit testing framework](https://docs.python.org/3/library/unittest.html)
     * [Coverage.py](https://coverage.readthedocs.io/en/coverage-5.2.1/)
 * ***Lint para Cloudformation***
-    * [GFN_Nag](https://github.com/stelligent/cfn_nag)
+    * [CFN_Nag](https://github.com/stelligent/cfn_nag)
 * ***Lint para Dockerfile***
     * [Haskell Dockerfile Linter](https://github.com/hadolint/hadolint)
 * ***SAST***
@@ -53,29 +53,30 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 > *informações enviadas por e-mail*
 > * [Event Engine](https://dashboard.eventengine.run/login)
 
-### 1.2 Caso ainda não tenha, instale a ***aws cli*** e crie um novo profile para a sua conta.
-> * [Como instalar a aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
-> * [Como configurar um novo profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+### 1.2 Caso ainda não tenha, instale a ***aws cli***
+> * [Como instalar a aws cli](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/install-cliv2.html)
 
+### 1.3 Crie um novo profile para a sua conta.
 * Você deve pegar suas credenciais na console do **Event Engine**, na opção ***AWS Console***
 * Exemplo de configuração do arquivo ~/.aws/credentials
-
+> Importante configurar o parâmetro aws_session_token!
 ```
 [myprofile]
 aws_access_key_id = <your_access_key>
 aws_secret_access_key = <your_secret_key>
 aws_session_token = <your_token>
 ```
+> * [Como configurar um novo profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
 
-### 1.3 Valide a configuração do seu profile.
+### 1.4 Valide a configuração do seu profile.
 O comando abaixo deverá retornar seu **AccountId**:
 ```
 aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
 
-### 1.4 Crie seu usuário para o CodeCommit.
-* Crie um grupo chamado CodeCommitUsers e selecione a managed policy ***AWSCodeCommitPowerUser***.
+### 1.5 Crie seu usuário para o CodeCommit.
+* Na console do IAM, crie um grupo chamado CodeCommitUsers e selecione a managed policy ***AWSCodeCommitPowerUser***.
 * Crie um novo usuário com acesso do tipo ***Programmatic access*** (sem acesso à console) e o adicione ao grupo criado anteriormente.
 * Crie uma nova credencial HTTPS para o CodeCommit para este novo usuário.
 
@@ -216,7 +217,7 @@ git checkout -b develop
 > ATENÇÃO NESTE PASSO!
 * templates/service.yaml
     * **ServiceName:** myapp ***(este parâmetro não muda!)***
-    * **ServicePath:** /myapp-develop
+    * **ServicePath:** /myapp-develop ***(este é o path que será usado no ALB)***
     * **BranchName:** develop
     * **AlbRulePriority:** 3 (AlbRulePriority+1) ***Este número nunca deve ser repetido entre os micro-serviços***
 
@@ -243,6 +244,12 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 > Não será criado um novo repositório como da primeira vez porque existe uma ***condition*** no Cloudformation para apenas criar o repositório quando a branch informada for a ***master***.
 
 ### 4.5 Valide a execução da pipeline
+* Acesse a URL do Load Balancer adicionando o path do seu microserviço para vê-lo funcionando.
+    * Para pegar a URL do Load Balancer, vá até a Console do Cloudformation, acesse a stack **networking** e clique em Outputs.
+    * Ao final da URL, adicione "***/myapp-develop***".
+    * ***Obs: Este passo somente funcionará após iniciar o deploy do serviço. (penúltimo estágio da pipeline).***
+* Atualize (refresh) algumas vezes a página para conferir que as conexões estão sendo balanceadas entre as duas AZ's.
+    * ***Obs: Este passo somente funcionará após iniciar o deploy do serviço. (penúltimo estágio da pipeline).***
 
 <br />
 <br />
@@ -252,7 +259,7 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 ## 5. Adicionando estágios de testes na pipeline
 
 ### 5.1 Edite a pipeline master
-* Através da console do Cloudformation, edite a stack da pipeline master, selecionando a opção ***Use current template***.
+* Através da console do Cloudformation, edite a stack da pipeline master ***(pipeline-myapp)***, selecionando a opção ***Use current template***.
 * Habilite os demais testes que estavam desabilitados.
 * Após concluir a atualização, vá até a pipeline no console do CodePipeline e clique em ***Release Changes***.
 
