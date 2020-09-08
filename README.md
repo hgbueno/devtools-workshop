@@ -167,12 +167,21 @@ cp -rpf ../devtools-workshop/sample-app/* <RepoName>/
 * app/main.py
     *  **mypath="myapp"**
 
-#### Envie as mudanças para repositório
+#### Envie o código para repositório
 ```
 git add .
 git commit -m "first commit"
 git push origin master
 ```
+#### Acompanhe a execução da pipeline
+* Acompanhe os logs de execução de cada job do CodeBuild.
+* Valide que os relatórios de execução estão sendo salvos no Bucket S3
+* Após o estágio de Publish, você receberá um e-mail solicitando aprovação para seguir com a pipeline.
+* Acesse a URL do Load Balancer adicionando o path do seu microserviço para vê-lo funcionando.
+    * Para pegar a URL do Load Balancer, vá até a Console do Cloudformation, acesse a stack **networking** e clique em Outputs.
+    * Ao final desta URL, adicione "***/myapp***".
+* Atualize (refresh) algumas vezes a página para conferir que as conexões estão sendo balanceadas entre as duas AZ's.
+
 <br />
 <br />
 <br />
@@ -186,11 +195,12 @@ git checkout -b develop
 ```
 
 ### 4.2 Edite os seguintes arquivos para o novo micro-serviço:
-
+> ATENÇÃO NESTE PASSO!
 * templates/service.yaml
+    * **ServiceName:** myapp ***(este parâmetro não muda!)***
     * **ServicePath:** /myapp-develop
     * **BranchName:** develop
-    * **AlbRulePriority:** 3 (AlbRulePriority + 1)
+    * **AlbRulePriority:** 3 (AlbRulePriority+1) ***Este número nunca deve ser repetido entre os micro-serviços***
 
 * app/main.py
     *  **mypath="myapp-develop"**
@@ -204,8 +214,10 @@ git push origin develop
 
 #### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp-develop
-* **ServiceName:** myapp (mesmo nome do serviço criado anteriormente)
+* **ServiceName:** myapp ***(mesmo nome do serviço criado anteriormente)***
 * **BranchName:** develop
+* **Email:** (não precisa preencher)
+* **ManualApproval:** false
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
 * Verifique que a pipeline foi criada no CodePipeline.

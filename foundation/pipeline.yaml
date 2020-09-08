@@ -10,6 +10,7 @@ Parameters:
     Default: master
   Email:
     Type: String
+    Default: seu@email.com
     Description: Your e-mail
   ManualApproval:
     Type: String
