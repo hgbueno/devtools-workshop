@@ -57,6 +57,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 > * [Como instalar a aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
 > * [Como configurar um novo profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 
+* Você deve pegar suas credenciais na console do **Event Engine**, na opção ***AWS Console***
 * Exemplo de configuração do arquivo ~/.aws/credentials
 
 ```
