@@ -76,8 +76,7 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 ```
 
 ### 1.5 Crie seu usuário para o CodeCommit.
-* Na console do IAM, crie um grupo chamado CodeCommitUsers e selecione a managed policy ***AWSCodeCommitPowerUser***.
-* Crie um novo usuário com acesso do tipo ***Programmatic access*** (sem acesso à console) e o adicione ao grupo criado anteriormente.
+* Na [Console do IAM](https://console.aws.amazon.com/iam/home?region=us-east-1), crie um novo usuário com acesso do tipo ***Programmatic access*** (sem acesso à console), crie um grupo chamado ***CodeCommitUsers*** e selecione a managed policy ***AWSCodeCommitPowerUser***.
 * Crie uma nova credencial HTTPS para o CodeCommit para este novo usuário.
 
 > * [Criação de um usuário do IAM na sua conta da AWS](https://docs.aws.amazon.com/pt_br/IAM/latest/UserGuide/id_users_create.html#id_users_create_console)
@@ -85,8 +84,13 @@ aws sts get-caller-identity --query Account --output text --profile <profile>
 
 
 ### 1.5 Confirme que a nova credencial está funcionando.
-* Crie um repositório apenas para teste.
+* Na [Console do CodeCommit](https://console.aws.amazon.com/codesuite/codecommit/home?region=us-east-1#), crie um repositório apenas para teste.
 * Clone o repositório em sua máquina utilizando a nova credencial.
+* Para copiar a URL do novo repositório, clique em **Clone URL**, depois em **Clone HTTPS**.
+* Na sua máquina, execute:
+```
+git clone <RepoURL>
+```
 * Delete o repositório.
 
 > [Conceitos básicos do Git e do AWS CodeCommit](https://docs.aws.amazon.com/pt_br/codecommit/latest/userguide/getting-started.html#getting-started-create-repo)
@@ -107,6 +111,8 @@ git clone https://github.com/hgbueno/devtools-workshop.git
 > * **3. Fargate:** Cluster Fargate.
 >
 > [Melhores práticas do AWS CloudFormation](https://docs.aws.amazon.com/pt_br/AWSCloudFormation/latest/UserGuide/best-practices.html)
+
+***ATENÇÃO! Existem dependências entre as stacks, portanto elas não podem ser criadas paralelamente.***
 
 ### 2.1 Networking
 ```
@@ -151,7 +157,7 @@ Através da console Web do Cloudformation, crie uma nova stack com base no templ
 * **Email:** <seu_email>
 > *Não é necessário alterar os valores dos demais parâmetros.*
 
-* **Você receberá um e-mail para confirmar a inscrição no tópico SNS. Faça essa confirmação antes de prosseguir.**
+* **ATENÇÃO! Você receberá um e-mail para confirmar a inscrição no tópico SNS. Faça essa confirmação antes de prosseguir.**
 * Verifique que o repositório foi criado no CodeCommit.
 * Verifique que a pipeline foi criada no CodePipeline.
 
