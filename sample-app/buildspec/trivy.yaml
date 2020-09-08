@@ -5,10 +5,12 @@ phases:
       docker: 18
   pre_build:
     commands:
+      - apt update
+      - apt install rpm -y
       - export VERSION=$(curl --silent "https://api.github.com/repos/aquasecurity/trivy/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
       - wget https://github.com/aquasecurity/trivy/releases/download/v${VERSION}/trivy_${VERSION}_Linux-64bit.deb
       - dpkg -i trivy_${VERSION}_Linux-64bit.deb
- build:
+  build:
     commands:
       - docker build -t trivy:test .
   build:
