@@ -43,6 +43,7 @@ Implemente pipelines CI/CD para micro-serviços em python rodando em container n
 * ***Container Security***
     * [Trivy](https://github.com/aquasecurity/trivy)
 
+![Testes](img/tests.png)
 
 ## 1. Preparação do ambiente para o workshop
 
