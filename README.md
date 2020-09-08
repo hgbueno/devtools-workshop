@@ -209,14 +209,15 @@ git checkout -b develop
 * app/main.py
     *  **mypath="myapp-develop"**
 
-#### Envie as mudanças para repositório
+### 4.3 Envie as mudanças para repositório
 ```
 git add .
 git commit -m "first commit"
 git push origin develop
 ```
 
-#### Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
+### 4.4 Crie uma nova pipeline para a branch develop
+Através da console Web do Cloudformation, crie uma nova stack com base no template **pipeline.yaml** com os seguintes parâmetros:
 * **Stack name:** pipeline-myapp-develop
 * **ServiceName:** myapp ***(mesmo nome do serviço criado anteriormente)***
 * **BranchName:** develop
