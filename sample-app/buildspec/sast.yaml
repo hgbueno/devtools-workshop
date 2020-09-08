@@ -18,4 +18,4 @@ phases:
       - aws s3 cp insecure_report.txt s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-safety-$CommitID.txt
       - echo "Running Bandit..."
       - bandit -r app/ -f html -o report.html
-      - aws s3 cp report-html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-bandit-$CommitID.html
+      - aws s3 cp report.html s3://$AccountID-devtools/$ServiceName-$BranchName/$CommitID/sast-bandit-$CommitID.html
