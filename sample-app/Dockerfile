@@ -1,6 +1,6 @@
 FROM python:3.8.5-slim
 RUN apt-get update && \
-    apt-get -y install gcc --no-install-recommends \
+    apt-get -y install gcc \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY /app /app
